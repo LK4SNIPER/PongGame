@@ -1,4 +1,5 @@
 import pygame, sys, random
+from pygame import mixer
 
 # Ball Animation
 def ball_animation():
@@ -12,6 +13,7 @@ def ball_animation():
         ball_restart()
 
     if ball.colliderect(player) or ball.colliderect(opponent):
+
         ball_speed_x *= -1
 
 # Player Animation
@@ -54,13 +56,18 @@ ball = pygame.Rect(screen_widght/2 - 15, screen_height/2 - 15, 30, 30)
 player = pygame.Rect(screen_widght - 20, screen_height/2 - 70, 10, 140)
 opponent = pygame.Rect(10, screen_height/2 - 70, 10, 140)
 
+#Background color and rectangle colors
 bg_color = pygame.Color("grey12")
 light_grey = (200, 200, 200)
 
+#General speeds
 ball_speed_x = 7 * random.choice((1, -1))
 ball_speed_y = 7 * random.choice((1, -1))
 player_speed = 0
 opponent_speed = 7
+
+#Sounds used
+#ball_sound = mixer.Sound("")
 
 # Main loop
 while True:
