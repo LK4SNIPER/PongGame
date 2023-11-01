@@ -1,6 +1,9 @@
 import pygame, sys, random
 from pygame import mixer
 
+pygame.init()
+pygame.font.init()
+
 # Ball Animation
 def ball_animation():
     global ball_speed_y, ball_speed_x
@@ -9,7 +12,13 @@ def ball_animation():
 
     if ball.top <= 0 or ball.bottom >= screen_height:
         ball_speed_y *= -1
-    if ball.left <= 0 or ball.right >= screen_widght:
+    if ball.left <= 0:
+        global player_score 
+        player_score += 1
+        ball_restart()
+    elif ball.right >= screen_width:
+        global computer_score
+        computer_score += 1
         ball_restart()
 
     if ball.colliderect(player) or ball.colliderect(opponent):
@@ -38,7 +47,7 @@ def opponent_animation():
 # Ball restart
 def ball_restart():
     global ball_speed_x, ball_speed_y
-    ball.center = (screen_widght/2, screen_height/2)
+    ball.center = (screen_width/2, screen_height/2)
     ball_speed_y *= random.choice((1, -1))
     ball_speed_x *= random.choice((1, -1))
 
@@ -46,14 +55,16 @@ def ball_restart():
 # General setup
 pygame.init()
 clock = pygame.time.Clock()
-screen_widght = 1280
+screen_width = 1280
 screen_height = 960
-screen = pygame.display.set_mode((screen_widght, screen_height))
+screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Pong")
+computer_score = 0
+player_score = 0
 
 # Game rectanles
-ball = pygame.Rect(screen_widght/2 - 15, screen_height/2 - 15, 30, 30)
-player = pygame.Rect(screen_widght - 20, screen_height/2 - 70, 10, 140)
+ball = pygame.Rect(screen_width/2 - 15, screen_height/2 - 15, 30, 30)
+player = pygame.Rect(screen_width - 20, screen_height/2 - 70, 10, 140)
 opponent = pygame.Rect(10, screen_height/2 - 70, 10, 140)
 
 #Background color and rectangle colors
@@ -71,6 +82,8 @@ opponent_speed = 7
 
 # Main loop
 while True:
+    font = pygame.font.Font(None, 64)
+
     # Inputs
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -96,6 +109,9 @@ while True:
     pygame.draw.rect(screen, light_grey, player)
     pygame.draw.rect(screen, light_grey, opponent)
     pygame.draw.ellipse(screen, light_grey, ball)
+
+    score_text = font.render(f"{computer_score} : {player_score}", True, (150, 150, 150))
+    screen.blit(score_text, (screen_width/2-45, screen_height/2))
 
     # Updating window
     pygame.display.flip()
