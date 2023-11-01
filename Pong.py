@@ -9,7 +9,13 @@ def ball_animation():
 
     if ball.top <= 0 or ball.bottom >= screen_height:
         ball_speed_y *= -1
-    if ball.left <= 0 or ball.right >= screen_width:
+    if ball.left <= 0:
+        global player_score 
+        player_score += 1
+        ball_restart()
+    elif ball.right >= screen_width:
+        global computer_score
+        computer_score += 1
         ball_restart()
 
     if ball.colliderect(player) or ball.colliderect(opponent):
@@ -50,6 +56,8 @@ screen_width = 1280
 screen_height = 960
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Pong")
+computer_score = 0
+player_score = 0
 
 # Game rectanles
 ball = pygame.Rect(screen_width/2 - 15, screen_height/2 - 15, 30, 30)
@@ -96,6 +104,8 @@ while True:
     pygame.draw.rect(screen, light_grey, player)
     pygame.draw.rect(screen, light_grey, opponent)
     pygame.draw.ellipse(screen, light_grey, ball)
+
+    print(str(computer_score) + " : " + str(player_score))
 
     # Updating window
     pygame.display.flip()
