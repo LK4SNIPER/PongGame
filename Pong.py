@@ -1,6 +1,9 @@
 import pygame, sys, random
 from pygame import mixer
 
+pygame.init()
+pygame.font.init()
+
 # Ball Animation
 def ball_animation():
     global ball_speed_y, ball_speed_x
@@ -79,6 +82,8 @@ opponent_speed = 7
 
 # Main loop
 while True:
+    font = pygame.font.Font(None, 64)
+
     # Inputs
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -105,7 +110,8 @@ while True:
     pygame.draw.rect(screen, light_grey, opponent)
     pygame.draw.ellipse(screen, light_grey, ball)
 
-    print(str(computer_score) + " : " + str(player_score))
+    score_text = font.render(f"{computer_score} : {player_score}", True, (150, 150, 150))
+    screen.blit(score_text, (screen_width/2-45, screen_height/2))
 
     # Updating window
     pygame.display.flip()
